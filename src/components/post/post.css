@@ -1,0 +1,23 @@
+.post {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    margin: 1px 0;
+}
+
+.post-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5em;
+    font-size: 0.8rem;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.post-body {
+    padding: 0 0.5rem 0.5rem;
+    font-size: 1rem;
+}
