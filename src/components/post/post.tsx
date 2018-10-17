@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './post.css';
+import * as moment from 'moment';
 
 class PostComponent extends React.Component<PostComponentProps, PostComponentState> {
     constructor(props: PostComponentProps) {
@@ -12,8 +13,8 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
         return (
         <div className="post">
             <div className="post-header">
-                <span className="username">@{post.author.username}</span>
-                <span className="time-ago">{post.createdAt.fromNow()}</span>
+                <span className="username">@{post.owner? post.owner.username: 'anonymous'}</span>
+                <span className="time-ago">{moment(post.createdAt).fromNow()}</span>
             </div>
             <div className="post-body">
                 {post.body}
