@@ -5,6 +5,24 @@
     background: #ffffff;
 }
 
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.col {
+    flex: 1;
+}
+
+.right {
+    display: flex;
+    max-width: 10%;
+}
+
+.anonymous {
+    font-size: 0.8rem;
+}
+
 .text-input {
     flex-grow: 1;
     border: none;

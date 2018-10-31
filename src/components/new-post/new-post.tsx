@@ -8,7 +8,8 @@ class NewPostComponent extends React.Component<any, any> {
 
         this.state = {
             post: {
-                body: ''
+                body: '',
+                anonymous: false
             }
         };
     }
@@ -16,7 +17,8 @@ class NewPostComponent extends React.Component<any, any> {
     reset = () => {
         this.setState({
             post: {
-                body: ''
+                body: '',
+                anonymous: false
             }
         });
     };
@@ -24,14 +26,25 @@ class NewPostComponent extends React.Component<any, any> {
     render() {
         return (
             <div className="new-post">
-                <input className="text-input" placeholder="What's up?" name="body" value={this.state.post.body} onChange={this.handleInputChange}></input>
-                <button className="button-send" onClick={this.submit}>Send</button>
+                <div className="col">
+                    <div className="row">
+                        <input className="text-input" placeholder="What's up?" name="body" value={this.state.post.body} onChange={this.handleInputChange}></input>
+                    </div>
+                    <div className="row">
+                        <input type="checkbox" name="anonymous" checked={this.state.post.anonymous} onChange={this.handleInputChange}/> <label className="anonymous">Anonymous</label>
+                    </div>
+                </div>
+                <div className="col right">
+                    <button className="button-send" onClick={this.submit}>Send</button>
+                </div>
             </div>
         );
     }
 
     handleInputChange = (event) => {
-        this.setState({ post: { [event.target.name]: event.target.value }});
+        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+
+        this.setState({ post: { ...this.state.post, [event.target.name]: value}});
     };
 
     submit = async() => {
