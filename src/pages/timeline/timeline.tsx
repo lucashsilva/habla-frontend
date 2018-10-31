@@ -15,6 +15,10 @@ class TimelinePage extends React.Component<any, any> {
   }
 
   componentWillMount = async() => {
+    await this.refresh();
+  };
+
+  refresh = async() => {
     let response = await api.get('posts');
 
     this.setState({
@@ -25,7 +29,7 @@ class TimelinePage extends React.Component<any, any> {
   public render() {
     return (
       <div>
-        <NewPostComponent/>
+        <NewPostComponent onNewPost={this.refresh}/>
         <div className="posts">
             {this.state.posts.map(post => <PostComponent key={post.id} post={post}/>)}
         </div>

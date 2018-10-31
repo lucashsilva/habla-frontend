@@ -11,8 +11,6 @@ class NewPostComponent extends React.Component<any, any> {
                 body: ''
             }
         };
-
-        this.reset();
     }
 
     reset = () => {
@@ -38,6 +36,10 @@ class NewPostComponent extends React.Component<any, any> {
 
     submit = async() => {
         await api.post('posts', this.state.post);
+
+        if (this.props.onNewPost) {
+            await this.props.onNewPost(this.state.post);
+        }
 
         this.reset();
     }
