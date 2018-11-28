@@ -14,11 +14,12 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
         <div className="post">
             <div className="post-header">
                 <span className="username">@{post.owner? post.owner.username: 'anonymous'}</span>
-                <span className="time-ago">{moment(post.createdAt).fromNow()}</span>
+                <span className="distance">{post.distance}</span>
             </div>
             <div className="post-body">
                 {post.body}
             </div>
+            <span className="time-ago">{moment(post.createdAt).fromNow()}</span>
         </div>
         );
     }
