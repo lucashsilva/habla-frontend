@@ -7,7 +7,7 @@
     margin: 0.2em;
 }
 
-.login-button {
+.login-button, .register-button {
     background: white;
     border: none;
     margin: 0.2em;
