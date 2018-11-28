@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as firebase from 'firebase';
 
 export const api = axios.create({
-    baseURL: 'http://172.20.10.2:3000',
+    baseURL: 'http://localhost:3000',
 });
 
 api.interceptors.request.use(async(config) => {

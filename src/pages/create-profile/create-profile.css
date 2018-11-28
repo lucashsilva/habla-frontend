@@ -1,0 +1,21 @@
+.login-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-box input {
+    margin: 0.2em;
+    font-size: 1em;
+}
+
+.login-button {
+    background: white;
+    border: none;
+    margin: 0.2em;
+    padding: 1em;
+}
+
+.header {
+    font-size: 1.5em;
+    margin: 0.2em;
+}
