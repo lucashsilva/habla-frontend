@@ -4,6 +4,7 @@ import TimelinePage from './pages/timeline/timeline';
 import * as firebase from 'firebase';
 import LoginPage from './pages/login/login';
 import CreateProfilePage from './pages/create-profile/create-profile';
+import { api } from './services/api';
 
 
 class App extends React.Component<any,any> {
@@ -15,13 +16,27 @@ class App extends React.Component<any,any> {
       ready: false
     };
 
-    firebase.auth().onAuthStateChanged(user => {
-      this.setState({ ready: true, user: user });
+    firebase.auth().onAuthStateChanged(async(user) => {
+      try {
+        this.setState({ user: user });
+
+        if (!user) return; 
+
+        this.setState({ ready: false });
+
+        let response = await api.get("profiles/self");
+  
+        this.setState({ userProfile: response.data });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.setState({ ready: true });
+      }
     })
   }
 
   onProfileCreation = async(profile) => {
-    this.setState({ userProfile: profile });
+    this.setState({ userProfile: profile, ready: true });
   }
 
   public render() {
