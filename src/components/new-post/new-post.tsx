@@ -48,13 +48,25 @@ class NewPostComponent extends React.Component<any, any> {
     };
 
     submit = async() => {
-        await api.post('posts', this.state.post);
+        navigator.geolocation.getCurrentPosition(async(location) => {
+            this.setState({
+                post: {
+                    ... this.state.post, 
+                    location: {
+                        type: "Point", 
+                        coordinates: [location.coords.latitude, location.coords.longitude]
+                    }
+                }
+            });
 
-        if (this.props.onNewPost) {
-            await this.props.onNewPost(this.state.post);
-        }
+            await api.post('posts', this.state.post);
 
-        this.reset();
+            if (this.props.onNewPost) {
+                await this.props.onNewPost(this.state.post);
+            }
+
+            this.reset();
+        });
     }
 }
 

@@ -19,10 +19,18 @@ class TimelinePage extends React.Component<any, any> {
   };
 
   refresh = async() => {
-    let response = await api.get('posts');
-
-    this.setState({
-      posts: response.data
+    navigator.geolocation.getCurrentPosition(async(location) => {
+      let response = await api.get('posts', {
+        params: {
+          lat: location.coords.latitude,
+          lon: location.coords.longitude,
+          radius: 1000000
+        }
+      });
+  
+      this.setState({
+        posts: response.data
+      });
     });
   };
 
