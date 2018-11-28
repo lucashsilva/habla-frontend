@@ -24,7 +24,7 @@ class TimelinePage extends React.Component<any, any> {
         params: {
           lat: location.coords.latitude,
           lon: location.coords.longitude,
-          radius: 1000000
+          radius: 150000
         }
       });
   
