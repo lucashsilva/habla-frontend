@@ -1,11 +1,11 @@
 import * as React from 'react';
 import './App.css';
-import TimelinePage from './pages/timeline/timeline';
 import * as firebase from 'firebase';
 import LoginPage from './pages/login/login';
 import CreateProfilePage from './pages/create-profile/create-profile';
 import { client } from './services/client';
 import gql from 'graphql-tag';
+import DashboardPage from './pages/dashboard/dashboard';
 
 
 class App extends React.Component<any,any> {
@@ -61,7 +61,7 @@ class App extends React.Component<any,any> {
     if (!this.state.ready) return (<div>Loading...</div>);
     
     if (this.state.user && this.state.userProfile) {
-      return <TimelinePage/>;
+      return <DashboardPage/>;
     } else if (this.state.user && !this.state.userProfile) {
       return <CreateProfilePage onCreation={this.onProfileCreation}/>;
     } else {
