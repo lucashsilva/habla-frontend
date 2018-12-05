@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './new-post.css';
-import { api } from '../../services/api';
+import { client } from 'src/services/client';
+import gql from 'graphql-tag';
 
 class NewPostComponent extends React.Component<any, any> {
     constructor(props) {
@@ -8,9 +9,9 @@ class NewPostComponent extends React.Component<any, any> {
 
         this.state = {
             post: {
-                body: '',
-                anonymous: false
-            }
+                body: ''
+            },
+            anonymous: false
         };
     }
 
@@ -31,7 +32,7 @@ class NewPostComponent extends React.Component<any, any> {
                         <input className="text-input" placeholder="What's up?" name="body" value={this.state.post.body} onChange={this.handleInputChange}></input>
                     </div>
                     <div className="row">
-                        <input type="checkbox" name="anonymous" checked={this.state.post.anonymous} onChange={this.handleInputChange}/> <label className="anonymous">Anonymous</label>
+                        <input type="checkbox" name="anonymous" checked={this.state.anonymous} onChange={this.handleAnonymousCheckboxChange}/> <label className="anonymous">Anonymous</label>
                     </div>
                 </div>
                 <div className="col right">
@@ -42,30 +43,57 @@ class NewPostComponent extends React.Component<any, any> {
     }
 
     handleInputChange = (event) => {
-        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+        const value = event.target.value;
 
         this.setState({ post: { ...this.state.post, [event.target.name]: value}});
     };
 
+    handleAnonymousCheckboxChange = (event) => {
+        const value = event.target.checked;
+
+        this.setState({ anonymous: value });
+    }
+
     submit = async() => {
         navigator.geolocation.getCurrentPosition(async(location) => {
-            this.setState({
-                post: {
-                    ... this.state.post, 
-                    location: {
-                        type: "Point", 
-                        coordinates: [location.coords.latitude, location.coords.longitude]
+            try {
+                const response = await client.mutate({
+                    variables: { 
+                        post: this.state.post,
+                        channelId: this.props.channel? this.props.channel.id: null,
+                        anonymous: this.state.anonymous
+                    },
+                    mutation: gql(`
+                    mutation CreatePost ($channelId: ID, $post: PostInput!, $anonymous: Boolean) {
+                        createPost(channelId: $channelId, post: $post, anonymous: $anonymous) {
+                            id,
+                            body,
+                            distance,
+                            createdAt
+                            owner {
+                                uid
+                                username
+                            }
+                            channel {
+                                id
+                                name
+                            }
+                        }
                     }
-                }
-            });
-
-            await api.post('posts', this.state.post);
-
-            if (this.props.onNewPost) {
-                await this.props.onNewPost(this.state.post);
-            }
-
-            this.reset();
+                    `),
+                    context: {
+                        location: {
+                            latitude: location.coords.latitude,
+                            longitude: location.coords.longitude
+                        }
+                    }   
+                });
+            
+                this.props.onNewPost && await this.props.onNewPost(response.data.createPost);
+                this.reset();
+            } catch (error) {
+                console.log(error);
+            } 
         });
     }
 }

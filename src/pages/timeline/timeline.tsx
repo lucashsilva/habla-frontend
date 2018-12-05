@@ -2,7 +2,8 @@ import * as React from 'react';
 import PostComponent from '../../components/post/post';
 import NewPostComponent from '../../components/new-post/new-post';
 import './timeline.css';
-import { api } from '../../services/api';
+import { client } from 'src/services/client';
+import gql from 'graphql-tag';
 
 class TimelinePage extends React.Component<any, any> {
 
@@ -20,16 +21,42 @@ class TimelinePage extends React.Component<any, any> {
 
   refresh = async() => {
     navigator.geolocation.getCurrentPosition(async(location) => {
-      let response = await api.get('posts', {
-        params: {
-          lat: location.coords.latitude,
-          lon: location.coords.longitude,
-          radius: 150000
-        }
+      const response = await client.query<any>({
+        query: gql(`
+          {
+            posts(radius: 1500000000000000, skip: 0, take: 10) {
+              id
+              body
+              distance
+              createdAt
+              commentsCount
+              rate
+              profilePostVote {
+                type
+              }
+              owner {
+                uid
+                username
+                photoURL
+              }
+              channel {
+                id
+                name
+              }
+            }
+          }
+        `),
+        context: {
+          location: {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude
+          }
+        },
+        fetchPolicy: 'no-cache'
       });
   
       this.setState({
-        posts: response.data
+        posts: response.data.posts
       });
     });
   };

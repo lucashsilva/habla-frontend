@@ -4,7 +4,8 @@ import TimelinePage from './pages/timeline/timeline';
 import * as firebase from 'firebase';
 import LoginPage from './pages/login/login';
 import CreateProfilePage from './pages/create-profile/create-profile';
-import { api } from './services/api';
+import { client } from './services/client';
+import gql from 'graphql-tag';
 
 
 class App extends React.Component<any,any> {
@@ -24,9 +25,26 @@ class App extends React.Component<any,any> {
 
         this.setState({ ready: false });
 
-        let response = await api.get("profiles/self");
+        const response = await client.query({
+          query: gql(`
+            {
+              profile(uid: "${user.uid}") {
+                uid
+                name
+                username
+                bio
+                website
+                phone
+                gender
+              }
+            }
+          `),
+          fetchPolicy: 'no-cache'
+        });
+
+        const profile = (response.data as any).profile;
   
-        this.setState({ userProfile: response.data });
+        this.setState({ userProfile: profile });
       } catch (error) {
         console.log(error);
       } finally {

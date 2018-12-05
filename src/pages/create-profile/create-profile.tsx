@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './create-profile.css';
-import { api } from 'src/services/api';
+import { client } from 'src/services/client';
+import gql from 'graphql-tag';
 
 class CreateProfilePage extends React.Component<any, any> {
   constructor(props) {
@@ -29,7 +30,20 @@ class CreateProfilePage extends React.Component<any, any> {
   };
 
   private submit = async() => {
-    let response = await api.put("/profiles/self", this.state.profile);
+    let response = await client.mutate({
+      variables: { 
+        profile: this.state.profile
+      },
+      mutation: gql(`
+        mutation UpdateProfile ($profile: ProfileInput!) {
+          updateProfile(profile: $profile) {
+            uid
+            username
+            name
+          }
+        }
+      `)
+    });
 
     if (this.props.onCreation) {
       await this.props.onCreation(response.data);
