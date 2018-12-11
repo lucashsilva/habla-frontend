@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './post.css';
+import { Card, Icon, Image } from 'semantic-ui-react';
 import * as moment from 'moment';
 
 class PostComponent extends React.Component<PostComponentProps, PostComponentState> {
@@ -11,16 +12,32 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
         const post = this.props.post;
 
         return (
-        <div className="post">
-            <div className="post-header">
-                <span className="username">@{post.owner? post.owner.username: 'anonymous'}</span>
-                <span className="distance">{post.distance}</span>
-            </div>
-            <div className="post-body">
-                {post.body}
-            </div>
-            <span className="time-ago">{moment(post.createdAt).fromNow()}</span>
-        </div>
+            <Card className="post">
+                <Card.Content className="post-content">
+                    <Card.Header className="post-header">
+                        <Image floated='left' 
+                               size='mini' 
+                               className="avatar"
+                               src={post.owner && post.owner.photoURL || 'https://react.semantic-ui.com/images/avatar/large/molly.png'}/>
+                        {post.owner? post.owner.username: 'anonymous'}
+                        <span className="post-distance">{ post.distance }</span>
+                    </Card.Header>
+                    <Card.Description className="post-body">
+                        { post.body }
+                    </Card.Description>
+                </Card.Content>
+                <Card.Content extra className="post-footer">
+                <a>
+                    {moment(post.createdAt).fromNow()}
+                </a>
+                &nbsp;&nbsp;&nbsp;
+                <a>
+                    <Icon name='comments' />
+                    { post.commentsCount }
+                </a>
+                
+                </Card.Content>
+            </Card>
         );
     }
 }

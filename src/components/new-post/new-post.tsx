@@ -2,6 +2,7 @@ import * as React from 'react';
 import './new-post.css';
 import { client } from 'src/services/client';
 import gql from 'graphql-tag';
+import { Button, Input, Checkbox } from 'semantic-ui-react';
 
 class NewPostComponent extends React.Component<any, any> {
     constructor(props) {
@@ -27,17 +28,18 @@ class NewPostComponent extends React.Component<any, any> {
     render() {
         return (
             <div className="new-post">
-                <div className="col">
-                    <div className="row">
-                        <input className="text-input" placeholder="What's up?" name="body" value={this.state.post.body} onChange={this.handleInputChange}></input>
-                    </div>
-                    <div className="row">
-                        <input type="checkbox" name="anonymous" checked={this.state.anonymous} onChange={this.handleAnonymousCheckboxChange}/> <label className="anonymous">Anonymous</label>
-                    </div>
-                </div>
-                <div className="col right">
-                    <button className="button-send" onClick={this.submit}>Send</button>
-                </div>
+                <Input label={<Button primary onClick={this.submit}>Send</Button>}
+                       labelPosition='right'
+                       placeholder="What's up?"
+                       name='body'
+                       value={this.state.post.body} 
+                       onChange={this.handleInputChange}/>
+                <Checkbox type="checkbox" 
+                          name="anonymous" 
+                          checked={this.state.anonymous} 
+                          onChange={this.handleAnonymousCheckboxChange}
+                          label="Anonymous"
+                          className="anonymous-checkbox"/>
             </div>
         );
     }
@@ -48,10 +50,8 @@ class NewPostComponent extends React.Component<any, any> {
         this.setState({ post: { ...this.state.post, [event.target.name]: value}});
     };
 
-    handleAnonymousCheckboxChange = (event) => {
-        const value = event.target.checked;
-
-        this.setState({ anonymous: value });
+    handleAnonymousCheckboxChange = () => {
+        this.setState({ anonymous: !this.state.anonymous });
     }
 
     submit = async() => {
@@ -70,6 +70,7 @@ class NewPostComponent extends React.Component<any, any> {
                             body,
                             distance,
                             createdAt
+                            commentsCount
                             owner {
                                 uid
                                 username

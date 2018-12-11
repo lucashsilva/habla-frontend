@@ -12,7 +12,7 @@ class CreateProfilePage extends React.Component<any, any> {
 
   public render() {
     return (
-      <code>
+      <div>
         <div className="header">
           Let's create your profile
         </div>
@@ -21,7 +21,7 @@ class CreateProfilePage extends React.Component<any, any> {
           <input className="text-input" placeholder="Username" name="username" type="text" value={this.state.profile.username} onChange={this.handleProfileInputChange}></input>
           <button className="login-button" onClick={this.submit} disabled={!(this.state.profile.name && this.state.profile.username)}>Continue</button>
         </div>
-      </code>
+      </div>
     );
   }
 
