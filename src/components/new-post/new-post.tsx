@@ -12,7 +12,8 @@ class NewPostComponent extends React.Component<any, any> {
             post: {
                 body: ''
             },
-            anonymous: false
+            anonymous: false,
+            posting: false
         };
     }
 
@@ -28,12 +29,13 @@ class NewPostComponent extends React.Component<any, any> {
     render() {
         return (
             <div className="new-post">
-                <Input label={<Button primary onClick={this.submit}>Send</Button>}
+                <Input label={<Button primary onClick={this.submit} disabled={this.state.posting}>Send</Button>}
                        labelPosition='right'
                        placeholder="What's up?"
                        name='body'
                        value={this.state.post.body} 
-                       onChange={this.handleInputChange}/>
+                       onChange={this.handleInputChange}
+                       disabled={this.state.posting}/>
                 <Checkbox type="checkbox" 
                           name="anonymous" 
                           checked={this.state.anonymous} 
@@ -55,12 +57,14 @@ class NewPostComponent extends React.Component<any, any> {
     }
 
     submit = async() => {
+        this.setState({ posting: true });
+
         navigator.geolocation.getCurrentPosition(async(location) => {
             try {
                 const response = await client.mutate({
                     variables: { 
                         post: this.state.post,
-                        channelId: this.props.channel? this.props.channel.id: null,
+                        channelId: this.props.channelId || null,
                         anonymous: this.state.anonymous
                     },
                     mutation: gql(`
@@ -89,8 +93,11 @@ class NewPostComponent extends React.Component<any, any> {
                         }
                     }   
                 });
+
+                this.setState({ posting: false });
             
                 this.props.onNewPost && await this.props.onNewPost(response.data.createPost);
+
                 this.reset();
             } catch (error) {
                 console.log(error);

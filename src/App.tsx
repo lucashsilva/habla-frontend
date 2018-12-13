@@ -6,6 +6,7 @@ import CreateProfilePage from './pages/create-profile/create-profile';
 import { client } from './services/client';
 import gql from 'graphql-tag';
 import DashboardPage from './pages/dashboard/dashboard';
+import { Loader } from 'semantic-ui-react';
 
 
 class App extends React.Component<any,any> {
@@ -36,6 +37,7 @@ class App extends React.Component<any,any> {
                 website
                 phone
                 gender
+                photoURL
               }
             }
           `),
@@ -58,10 +60,10 @@ class App extends React.Component<any,any> {
   }
 
   public render() {
-    if (!this.state.ready) return (<div>Loading...</div>);
+    if (!this.state.ready) return (<Loader active/>);
     
     if (this.state.user && this.state.userProfile) {
-      return <DashboardPage/>;
+      return <DashboardPage userProfile={this.state.userProfile}/>;
     } else if (this.state.user && !this.state.userProfile) {
       return <CreateProfilePage onCreation={this.onProfileCreation}/>;
     } else {

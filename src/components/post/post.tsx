@@ -32,10 +32,10 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                 </a>
                 &nbsp;&nbsp;&nbsp;
                 <a>
-                    <Icon name='comments' />
-                    { post.commentsCount }
+                    <Icon name='comments' />{ post.commentsCount }
                 </a>
-                
+                &nbsp;&nbsp;&nbsp;
+                {  post.channel? (<a><b>#{ post.channel.name }</b> </a>) : null }
                 </Card.Content>
             </Card>
         );
