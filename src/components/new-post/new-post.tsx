@@ -41,7 +41,8 @@ class NewPostComponent extends React.Component<any, any> {
                           checked={this.state.anonymous} 
                           onChange={this.handleAnonymousCheckboxChange}
                           label="Anonymous"
-                          className="anonymous-checkbox"/>
+                          className="anonymous-checkbox"
+                          disabled={this.state.posting}/>
             </div>
         );
     }
