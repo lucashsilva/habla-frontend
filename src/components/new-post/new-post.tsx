@@ -79,6 +79,7 @@ class NewPostComponent extends React.Component<any, any> {
                             owner {
                                 uid
                                 username
+                                photoURL
                             }
                             channel {
                                 id
