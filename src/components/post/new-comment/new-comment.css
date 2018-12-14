@@ -1,0 +1,10 @@
+.new-comment {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    margin-bottom: 2px;
+}
+
+.anonymous-checkbox {
+    margin-top: 0.5rem;
+}

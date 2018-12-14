@@ -1,15 +1,15 @@
 import * as React from 'react';
-import './new-post.css';
+import './new-comment.css';
 import { client } from 'src/services/client';
 import gql from 'graphql-tag';
 import { Button, Input, Checkbox } from 'semantic-ui-react';
 
-class NewPostComponent extends React.Component<any, any> {
+class NewCommentComponent extends React.Component<NewCommentComponentProps, any> {
     constructor(props) {
         super(props);
 
         this.state = {
-            post: {
+            comment: {
                 body: ''
             },
             anonymous: false,
@@ -19,21 +19,20 @@ class NewPostComponent extends React.Component<any, any> {
 
     reset = () => {
         this.setState({
-            post: {
+            comment: {
                 body: ''
-            },
-            anonymous: false
+            }
         });
     };
 
     render() {
         return (
-            <div className="new-post">
+            <div className="new-comment">
                 <Input label={<Button primary onClick={this.submit} disabled={this.state.posting}>Send</Button>}
                        labelPosition='right'
-                       placeholder="What's up?"
+                       placeholder="Reply..."
                        name='body'
-                       value={this.state.post.body} 
+                       value={this.state.comment.body} 
                        onChange={this.handleInputChange}
                        disabled={this.state.posting}/>
                 <Checkbox type="checkbox" 
@@ -50,7 +49,7 @@ class NewPostComponent extends React.Component<any, any> {
     handleInputChange = (event) => {
         const value = event.target.value;
 
-        this.setState({ post: { ...this.state.post, [event.target.name]: value}});
+        this.setState({ comment: { ...this.state.comment, [event.target.name]: value}});
     };
 
     handleAnonymousCheckboxChange = () => {
@@ -63,42 +62,37 @@ class NewPostComponent extends React.Component<any, any> {
         navigator.geolocation.getCurrentPosition(async(location) => {
             try {
                 const response = await client.mutate({
-                    variables: { 
-                        post: this.state.post,
-                        channelId: this.props.channelId || null,
-                        anonymous: this.state.anonymous
-                    },
-                    mutation: gql(`
-                    mutation CreatePost ($channelId: ID, $post: PostInput!, $anonymous: Boolean) {
-                        createPost(channelId: $channelId, post: $post, anonymous: $anonymous) {
-                            id,
-                            body,
-                            distance,
-                            createdAt
-                            commentsCount
-                            owner {
-                                uid
-                                username
-                                photoURL
-                            }
-                            channel {
-                                id
-                                name
-                            }
+                  variables: { 
+                    comment: this.state.comment,
+                    postId: this.props.postId,
+                    anonymous: this.state.anonymous
+                  },
+                  mutation: gql(`
+                    mutation CreateComment ($postId: ID!, $comment: CommentInput!, $anonymous: Boolean) {
+                      createComment(postId: $postId, comment: $comment, anonymous: $anonymous) {
+                        id
+                        body
+                        distance
+                        owner {
+                          uid
+                          name
+                          username
+                          photoURL
                         }
+                      }
                     }
-                    `),
-                    context: {
-                        location: {
-                            latitude: location.coords.latitude,
-                            longitude: location.coords.longitude
-                        }
-                    }   
+                  `),
+                  context: {
+                    location: {
+                      latitude: location.coords.latitude,
+                      longitude: location.coords.longitude
+                    }
+                  }
                 });
 
                 this.setState({ posting: false });
             
-                this.props.onNewPost && await this.props.onNewPost(response.data.createPost);
+                this.props.onNewComment && await this.props.onNewComment(response.data.createComment);
 
                 this.reset();
             } catch (error) {
@@ -108,4 +102,9 @@ class NewPostComponent extends React.Component<any, any> {
     }
 }
 
-export default NewPostComponent;
+export interface NewCommentComponentProps {
+    postId: number;
+    onNewComment: Function;
+}
+
+export default NewCommentComponent;

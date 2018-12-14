@@ -2,8 +2,9 @@ import * as React from 'react';
 import './dashboard.css';
 import TimelineComponent from '../../components/timeline/timeline';
 import { Menu, Icon, Grid, Image } from 'semantic-ui-react';
-import { BrowserRouter as Router, Route, NavLink, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink, Redirect, Switch } from "react-router-dom";
 import ChannelListComponent from '../../components/channel-list/channel-list';
+import PostPage from '../post/post';
 
 class DashboardPage extends React.Component<any, any> {
 
@@ -29,10 +30,13 @@ class DashboardPage extends React.Component<any, any> {
             </Menu>
           </Grid.Column>
           <Grid.Column widescreen={8} largeScreen={7} computer={8}>
-            <Redirect exact from="/" to="/timeline" />
-            <Route path="/timeline" component={TimelineComponent}/>
-            <Route path="/channels" component={ChannelListComponent}/>
-            <Route children path="/channel/:channelId" component={TimelineComponent}/>
+            <Switch>
+              <Redirect exact from="/" to="/timeline" />
+              <Route path="/timeline" component={TimelineComponent}/>
+              <Route path="/channels" exact component={ChannelListComponent}/>
+              <Route path="/channels/:channelId" component={TimelineComponent}/>
+              <Route path="/posts/:postId" component={PostPage}/>
+            </Switch>
           </Grid.Column>
         </Grid>
       </Router>

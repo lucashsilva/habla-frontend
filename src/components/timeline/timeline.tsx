@@ -1,10 +1,10 @@
 import * as React from 'react';
-import PostComponent from '../../components/post/post';
 import NewPostComponent from '../../components/new-post/new-post';
 import './timeline.css';
 import { client } from 'src/services/client';
 import gql from 'graphql-tag';
 import { Loader, Segment, Icon, Header } from 'semantic-ui-react';
+import Post from '../post/post';
 
 class TimelineComponent extends React.Component<any, any> {
 
@@ -18,10 +18,10 @@ class TimelineComponent extends React.Component<any, any> {
   }
 
   componentWillMount = async() => {
-    await this.refresh();
+    this.refresh();
   }
 
-  refresh = async() => {
+  refresh = () => {
     this.setState({ refreshing: true });
 
     navigator.geolocation.getCurrentPosition(async(location) => {
@@ -82,21 +82,21 @@ class TimelineComponent extends React.Component<any, any> {
     return (
       <div>
         <Segment placeholder={!this.state.refreshing && !this.state.posts.length}>
-            {!this.state.refreshing && !this.state.posts.length?
-              (<Segment.Inline>
-                  <Header icon>
-                  <Icon name='search'/>
-                  There's nothing here yet. Why don't you start something?
-                </Header>
-                <TimelineNewPostComponent/>
-              </Segment.Inline>) :
-              (<Segment.Inline>
-                <TimelineNewPostComponent/>
-                <div className="posts">
-                  {this.state.posts && this.state.posts.map(post => <PostComponent key={post.id} post={post}/>)}
-                </div>
-                <Loader active={this.state.refreshing} inline="centered"/>
-              </Segment.Inline>)}
+          {!this.state.refreshing && !this.state.posts.length?
+          (<Segment.Inline>
+              <Header icon>
+              <Icon name='search'/>
+              There's nothing here yet. Why don't you start something?
+            </Header>
+            <TimelineNewPostComponent/>
+          </Segment.Inline>) :
+          (<Segment.Inline>
+            <TimelineNewPostComponent/>
+            <div className="posts">
+              {this.state.posts && this.state.posts.map(post => <Post key={post.id} post={post}/>)}
+            </div>
+            <Loader active={this.state.refreshing} inline="centered"/>
+          </Segment.Inline>)}
         </Segment>
       </div>
     );

@@ -48,7 +48,7 @@ class ChannelListComponent extends React.Component<any, any> {
         <Loader active={this.state.refreshing} inline="centered"/>
         <List selection verticalAlign='middle'>
         {this.state.channels && this.state.channels.map(channel => (
-          <List.Item key={channel.id} as={NavLink} to={`/channel/${channel.id}`}>
+          <List.Item key={channel.id} as={NavLink} to={`/channels/${channel.id}`}>
             <List.Content>
               <List.Header>#{channel.name}</List.Header>
             </List.Content>
