@@ -1,17 +1,71 @@
 import * as React from 'react';
 import './post.css';
-import { Card, Icon, Image } from 'semantic-ui-react';
+import { Card, Icon, Image, Loader } from 'semantic-ui-react';
 import * as moment from 'moment';
 import { NavLink } from "react-router-dom";
 import PostCommentsComponent from './comments/comments';
+import gql from 'graphql-tag';
+import { client } from 'src/services/client';
 
 class PostComponent extends React.Component<PostComponentProps, PostComponentState> {
     constructor(props: PostComponentProps) {
         super(props);
+
+        this.state = { 
+            post: this.props.post,
+            voting: false
+        }
     }
 
+    vote = async(type: "UP" | "DOWN") => {
+        if (!(type === "UP" || type === "DOWN")) return;
+
+        this.setState({ post: { ... this.state.post }, voting: true });
+
+        try {
+            const response = await client.mutate({
+            variables: { 
+                postId: this.state.post.id,
+                type: type
+            },
+            mutation: gql(`
+                mutation VotePost ($postId: ID!, $type: PostVoteType!) {
+                    vote(postId: $postId, type: $type) {
+                        type
+                        post {
+                            id
+                        }
+                        profile {
+                            uid
+                            photoURL
+                        }
+                        post {
+                            rate
+                        }
+                    }
+                }
+            `)
+            });
+
+            this.setState({
+                post: {
+                    ...this.state.post, 
+                    rate: response.data.vote.post.rate,
+                    profilePostVote: response.data.vote
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+        this.setState({
+            voting: false
+        });
+    }
+    
+
     render() {
-        const post = this.props.post;
+        const post = this.state.post;
 
         return (
             <div>
@@ -23,9 +77,12 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                                 className="avatar"
                                 src={post.owner && post.owner.photoURL || 'https://react.semantic-ui.com/images/avatar/large/molly.png'}/>
                             {post.owner? post.owner.username: 'anonymous'}
-                            <NavLink to={`/posts/${post.id}`} className="post-distance">
-                                { post.distance }
-                            </NavLink>
+                            
+                            <div className="thumbs">
+                                <Icon link name="chevron up" size="big" onClick={() => this.vote("UP")}/>
+                                { this.state.voting? <Loader inline active size="tiny"/>: post.rate }
+                                <Icon link name="chevron down" size="big" onClick={() => this.vote("DOWN")}/>
+                            </div>
                         </Card.Header>
                         <Card.Description className="post-body">
                             { post.body }
@@ -33,6 +90,10 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                     </Card.Content>
                     <Card.Content extra className="post-footer">
                     <NavLink to={`/posts/${post.id}`}>
+                        { post.distance }
+                        &nbsp;
+                        •
+                        &nbsp;
                         {moment(post.createdAt).fromNow()}
                     
                         &nbsp;&nbsp;&nbsp;
@@ -44,7 +105,7 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                     </Card.Content>
                 </Card>
                 {
-                    this.props.showComments? <PostCommentsComponent postId={this.props.post.id} comments={post.comments}/>: null
+                    this.props.showComments? <PostCommentsComponent postId={post.id} comments={post.comments}/>: null
                 }
             </div>
         );
@@ -57,7 +118,8 @@ interface PostComponentProps {
 }
 
 interface PostComponentState {
-
+    post: any;
+    voting: boolean;
 }
 
 export default PostComponent;
