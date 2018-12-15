@@ -32,10 +32,10 @@ class DashboardPage extends React.Component<any, any> {
           <Grid.Column widescreen={8} largeScreen={7} computer={8}>
             <Switch>
               <Redirect exact from="/" to="/timeline" />
-              <Route path="/timeline" component={TimelineComponent}/>
-              <Route path="/channels" exact component={ChannelListComponent}/>
-              <Route path="/channels/:channelId" component={TimelineComponent}/>
-              <Route path="/posts/:postId" component={PostPage}/>
+              <Route path="/timeline" exact component={TimelineComponent} key="timeline"/>
+              <Route path="/channels" exact component={ChannelListComponent} key="channels"/>
+              <Route path="/channels/:channelId" exact component={TimelineComponent} key="channel"/>
+              <Route path="/posts/:postId" exact component={PostPage} key="post"/>
             </Switch>
           </Grid.Column>
         </Grid>
