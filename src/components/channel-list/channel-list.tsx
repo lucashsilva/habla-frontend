@@ -2,8 +2,9 @@ import * as React from 'react';
 import './channel-list.css';
 import { client } from 'src/services/client';
 import gql from 'graphql-tag';
-import { Segment, List, Header, Loader } from 'semantic-ui-react';
+import { Segment, List, Header, Loader, Modal, Icon } from 'semantic-ui-react';
 import { NavLink } from "react-router-dom";
+import NewChannelComponent from '../new-channel/new-channel';
 
 class ChannelListComponent extends React.Component<any, any> {
 
@@ -44,7 +45,12 @@ class ChannelListComponent extends React.Component<any, any> {
   public render() {
     return (
       <Segment className="channels">
-        <Header>Channels</Header>
+        <Header>
+          Channels
+          <Modal trigger={<Icon link name="add" className="new-channel"/>} basic size='small'>
+            <NewChannelComponent onNewChannel={() => undefined}/>
+          </Modal>
+        </Header>
         <Loader active={this.state.refreshing} inline="centered"/>
         <List selection verticalAlign='middle'>
         {this.state.channels && this.state.channels.map(channel => (
