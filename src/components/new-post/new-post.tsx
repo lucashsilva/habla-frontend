@@ -29,7 +29,7 @@ class NewPostComponent extends React.Component<any, any> {
     render() {
         return (
             <div className="new-post">
-                <Input label={<Button primary onClick={this.submit} disabled={this.state.posting}>Send</Button>}
+                <Input label={<Button primary onClick={this.submit} disabled={this.state.posting} loading={this.state.posting}>Send</Button>}
                        labelPosition='right'
                        placeholder="What's up?"
                        name='body'

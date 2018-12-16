@@ -47,7 +47,7 @@ class ChannelListComponent extends React.Component<any, any> {
       <Segment className="channels">
         <Header>
           Channels
-          <Modal trigger={<Icon link name="add" className="new-channel"/>} basic size='small'>
+          <Modal trigger={<Icon link name="add" className="new-channel-icon"/>} basic size='small'>
             <NewChannelComponent onNewChannel={() => undefined}/>
           </Modal>
         </Header>

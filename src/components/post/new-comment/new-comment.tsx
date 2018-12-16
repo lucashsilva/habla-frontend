@@ -28,13 +28,14 @@ class NewCommentComponent extends React.Component<NewCommentComponentProps, any>
     render() {
         return (
             <div className="new-comment">
-                <Input label={<Button primary onClick={this.submit} disabled={this.state.posting}>Send</Button>}
+                <Input label={<Button primary onClick={this.submit} disabled={this.state.posting} loading={this.state.posting}>Send</Button>}
                        labelPosition='right'
                        placeholder="Reply..."
                        name='body'
                        value={this.state.comment.body} 
                        onChange={this.handleInputChange}
-                       disabled={this.state.posting}/>
+                       disabled={this.state.posting}
+                       fluid/>
                 <Checkbox type="checkbox" 
                           name="anonymous" 
                           checked={this.state.anonymous} 

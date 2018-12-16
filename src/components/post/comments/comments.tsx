@@ -27,7 +27,7 @@ class PostCommentsComponent extends React.Component<PostCommentsComponentProps, 
         <NewCommentComponent postId={this.props.postId} onNewComment={this.onNewComment}/>
   
         { comments.map(c => (
-        <Comment>
+        <Comment key={c.id}>
           <Comment.Avatar src={c.owner && c.owner.photoURL || 'https://react.semantic-ui.com/images/avatar/large/molly.png'} />
           <Comment.Content>
             <Comment.Author as='a'>{ c.owner && c.owner.name || 'anonymous' }</Comment.Author>
