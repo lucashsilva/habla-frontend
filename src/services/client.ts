@@ -2,7 +2,7 @@ import ApolloClient from "apollo-boost";
 import * as firebase from 'firebase';
 
 export const client = new ApolloClient({
-    uri: 'http://localhost:3000/graphql',
+    uri: process.env.GRAPHQL_URL || 'http://localhost:3000/graphql',
     request: async operation => {
         let token = await firebase.auth().currentUser.getIdToken();
 
