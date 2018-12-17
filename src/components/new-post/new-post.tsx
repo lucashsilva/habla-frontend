@@ -76,6 +76,7 @@ class NewPostComponent extends React.Component<any, any> {
                             distance,
                             createdAt
                             commentsCount
+                            rate
                             owner {
                                 uid
                                 username

@@ -82,7 +82,7 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                             
                             <div className="thumbs">
                                 <Icon link name="chevron up" size="big" onClick={() => this.vote("UP")}/>
-                                { this.state.voting? <Loader inline active size="tiny"/>: post.rate }
+                                { this.state.voting? <Loader inline active size="tiny"/>: post.rate || 0 }
                                 <Icon link name="chevron down" size="big" onClick={() => this.vote("DOWN")}/>
                             </div>
                         </Card.Header>
