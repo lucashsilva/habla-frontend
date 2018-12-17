@@ -24,6 +24,8 @@ class App extends React.Component<any,any> {
     };
 
     firebase.auth().onAuthStateChanged(async(user) => {
+      this.setState({ ready: false });
+
       try {
         this.setState({ user: user });
 
