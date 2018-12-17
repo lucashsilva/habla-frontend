@@ -48,7 +48,7 @@ class ChannelListComponent extends React.Component<any, any> {
         <Header>
           Channels
           <Modal trigger={<Icon link name="add" className="new-channel-icon"/>} basic size='small'>
-            <NewChannelComponent onNewChannel={() => undefined}/>
+            <NewChannelComponent onNewChannel={(channel) => this.props.history.push(`/channels/${channel.id}`)}/>
           </Modal>
         </Header>
         <Loader active={this.state.refreshing} inline="centered"/>
