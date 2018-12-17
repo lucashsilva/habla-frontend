@@ -29,6 +29,7 @@ class App extends React.Component<any,any> {
 
         if (!user) {
           localStorage.removeItem('userIsRegistered');
+          this.setState({ userIsRegistered: false });
           return;
         }
 
