@@ -28,7 +28,7 @@ class TimelineComponent extends React.Component<any, any> {
       const response = await client.query<any>({
         query: gql(`
           {
-            posts(radius: 1500000000000000, skip: 0, take: 10, channelId: ${this.channelId || null}) {
+            posts(radius: 1500000000000000, skip: 0, take: 10, channelId: ${this.props.channelId || null}) {
               id
               body
               distance
@@ -72,12 +72,8 @@ class TimelineComponent extends React.Component<any, any> {
     });
   };
 
-  get channelId() {
-    return this.props && this.props.match && this.props.match && this.props.match.params.channelId;
-  }
-
   public render() {
-    const TimelineNewPostComponent = () => (<NewPostComponent onNewPost={this.onNewPost} channelId={this.channelId}/>);
+    const TimelineNewPostComponent = () => (<NewPostComponent onNewPost={this.onNewPost} channelId={this.props.channelId}/>);
 
     return (
       <div>

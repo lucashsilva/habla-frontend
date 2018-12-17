@@ -72,11 +72,13 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                 <Card className="post">
                     <Card.Content className="post-content">
                         <Card.Header className="post-header">
-                            <Image floated='left' 
-                                size='mini' 
-                                className="avatar"
-                                src={post.owner && post.owner.photoURL || 'https://react.semantic-ui.com/images/avatar/large/molly.png'}/>
-                            {post.owner? post.owner.username: 'anonymous'}
+                            <NavLink to={post.owner? `/profile/${post.owner.uid}`: '#'} exact className="header-link">
+                                <Image floated='left' 
+                                       size='mini' 
+                                       className="avatar"
+                                       src={post.owner && post.owner.photoURL || 'https://react.semantic-ui.com/images/avatar/large/molly.png'}/>
+                                {post.owner? post.owner.username: 'anonymous'}
+                            </NavLink>
                             
                             <div className="thumbs">
                                 <Icon link name="chevron up" size="big" onClick={() => this.vote("UP")}/>

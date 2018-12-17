@@ -5,9 +5,13 @@ import LoginPage from './pages/login/login';
 import CreateProfilePage from './pages/create-profile/create-profile';
 import { client } from './services/client';
 import gql from 'graphql-tag';
-import DashboardPage from './pages/dashboard/dashboard';
-import { Loader } from 'semantic-ui-react';
-
+import { Loader, Grid } from 'semantic-ui-react';
+import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import ChannelListComponent from './components/channel-list/channel-list';
+import PostPage from './pages/post/post';
+import TimelinePage from './pages/timeline/timeline';
+import ProfilePage from './pages/profile/profile';
+import SidebarComponent from './components/sidebar/sidebar';
 
 class App extends React.Component<any,any> {
   constructor(props) {
@@ -15,6 +19,7 @@ class App extends React.Component<any,any> {
 
     this.state = {
       user: null,
+      userIsRegistered: false,
       ready: false
     };
 
@@ -22,31 +27,27 @@ class App extends React.Component<any,any> {
       try {
         this.setState({ user: user });
 
-        if (!user) return; 
+        if (!user) return;
 
-        this.setState({ ready: false });
+        let userIsRegistered = localStorage.getItem('userIsRegistered');
 
-        const response = await client.query({
+        if (userIsRegistered === 'true') {
+          this.setState({ userIsRegistered: true });
+          return;
+        }
+
+        await client.query({
           query: gql(`
             {
               profile(uid: "${user.uid}") {
                 uid
-                name
-                username
-                bio
-                website
-                phone
-                gender
-                photoURL
               }
             }
           `),
           fetchPolicy: 'no-cache'
         });
 
-        const profile = (response.data as any).profile;
-  
-        this.setState({ userProfile: profile });
+        localStorage.setItem('userIsRegistered', 'true');
       } catch (error) {
         console.log(error);
       } finally {
@@ -56,15 +57,41 @@ class App extends React.Component<any,any> {
   }
 
   onProfileCreation = async(profile) => {
-    this.setState({ userProfile: profile, ready: true });
+    this.setState({ userIsRegistered: true, ready: true });
   }
 
   public render() {
     if (!this.state.ready) return (<Loader active/>);
     
-    if (this.state.user && this.state.userProfile) {
-      return <DashboardPage userProfile={this.state.userProfile}/>;
-    } else if (this.state.user && !this.state.userProfile) {
+    if (this.state.user && this.state.userIsRegistered) {
+      return (
+        <Router>
+          <Grid padded centered>
+            <Grid.Column widescreen={2} largeScreen={3} computer={4} tablet={5}>
+              <Switch>
+                <Route path="/profile/:profileUid" exact render={(props) => (
+                  <SidebarComponent profileUid={props.match.params.profileUid}/>
+                )}/>
+                <Route render={() => (
+                  <SidebarComponent profileUid={firebase.auth().currentUser.uid}/>
+                )}/>
+              </Switch>
+            </Grid.Column>
+            <Grid.Column widescreen={8} largeScreen={7} computer={8}>
+              <Switch>
+                <Redirect exact from="/" to="/timeline" />
+                <Route path="/timeline" exact component={TimelinePage} key="timeline"/>
+                <Route path="/channels" exact component={ChannelListComponent} key="channels"/>
+                <Route path="/channels/:channelId" exact component={TimelinePage} key="channel"/>
+                <Route path="/posts/:postId" exact component={PostPage} key="post"/>
+                <Route path="/profile" exact component={ProfilePage} key="own-profile"/>
+                <Route path="/profile/:profileUid" exact component={ProfilePage} key="user-profile"/>
+              </Switch>
+            </Grid.Column>
+          </Grid>
+        </Router>
+      )
+    } else if (this.state.user && !this.state.userIsRegistered) {
       return <CreateProfilePage onCreation={this.onProfileCreation}/>;
     } else {
       return <LoginPage/>;
