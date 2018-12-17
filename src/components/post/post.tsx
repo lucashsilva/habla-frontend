@@ -66,8 +66,6 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
     render() {
         const post = this.state.post;
 
-        console.log(post);
-
         return (
             <div>
                 <Card className="post">
