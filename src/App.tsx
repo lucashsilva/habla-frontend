@@ -52,9 +52,8 @@ class App extends React.Component<any,any> {
 
         if (response.data.profile) {
           localStorage.setItem('userIsRegistered', 'true');
+          this.setState({ userIsRegistered: true });
         }
-
-        this.setState({ userIsRegistered: true });
       } catch (error) {
         console.log(error);
       } finally {
