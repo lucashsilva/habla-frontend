@@ -102,7 +102,7 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                         <Icon name='comments' />{ post.commentsCount }
                     </NavLink>
                     &nbsp;&nbsp;&nbsp;
-                    {  post.channel? (<a><b>#{ post.channel.name }</b> </a>) : null }
+                    {  post.channel? (<NavLink to={`/channels/${post.channel.id}`}><b>#{ post.channel.name }</b> </NavLink>) : null }
                     </Card.Content>
                 </Card>
                 {
