@@ -23,7 +23,7 @@ services:
         depends_on:
             - cloud-sql-proxy
     frontend:
-        image: habla-frontend
+        image: lucashenrique125/habla-frontend
         ports:
             - "80:8080"
         environment:
