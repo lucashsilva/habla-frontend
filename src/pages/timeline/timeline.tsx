@@ -14,7 +14,7 @@ class TimelinePage extends React.Component<any, any> {
 
   public render() {
     return (
-      <TimelineComponent/>
+      <TimelineComponent channelId={this.channelId}/>
     );
   }
 }
