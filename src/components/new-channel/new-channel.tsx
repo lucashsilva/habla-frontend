@@ -61,6 +61,7 @@ class NewChannelComponent extends React.Component<any, any> {
                 mutation: gql(`
                     mutation NewChannel ($channel: ChannelInput!) {
                         createChannel(channel: $channel) {
+                            id
                             name
                         }
                     }
