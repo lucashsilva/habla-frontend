@@ -34,9 +34,9 @@ class LoginPage extends React.Component<any, any> {
                         content={this.state.errorMessage}
                 />
                 <Button.Group fluid>
-                  <Button primary onClick={this.login} disabled={!(this.state.credentials.email && this.state.credentials.password)}>Login</Button>
+                  <Button primary onClick={this.login}>Login</Button>
                   <Button.Or />
-                  <Button color='orange' onClick={this.register} disabled={!(this.state.credentials.email && this.state.credentials.password)}>Register</Button>
+                  <Button color='orange' onClick={this.register}>Register</Button>
                 </Button.Group>
               </Form>
             <Divider horizontal>Or</Divider>
@@ -54,6 +54,11 @@ class LoginPage extends React.Component<any, any> {
   };
 
   private login = async() => {
+    if (!(this.state.credentials.email && this.state.credentials.password)) {
+      this.setState({ errorMessage: 'Please inform your email and password to login.' });
+      return;
+    }
+
     this.setState({ loading: true });
     
     try {
@@ -85,6 +90,11 @@ class LoginPage extends React.Component<any, any> {
   }
 
   private register = async() => {
+    if (!(this.state.credentials.email && this.state.credentials.password)) {
+      this.setState({ errorMessage: 'Please inform an email and password to create an account.' });
+      return;
+    }
+
     this.setState({ loading: true });
     
     try {
