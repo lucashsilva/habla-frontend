@@ -2,7 +2,7 @@ import ApolloClient from "apollo-boost";
 import * as firebase from 'firebase';
 
 export const client = new ApolloClient({
-    uri: process.env.GRAPHQL_URL || 'http://habla.online/graphql',
+    uri: process.env.GRAPHQL_URL || 'http://api.habla.online/graphql',
     request: async operation => {
         let token = await firebase.auth().currentUser.getIdToken();
 
