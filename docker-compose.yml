@@ -12,7 +12,7 @@ services:
         ports:
         - 5432:5432
     backend:
-        image: habla-api
+        image: habla-backend
         ports:
             - "3000:3000"
         build: .
