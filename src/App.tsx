@@ -27,7 +27,10 @@ class App extends React.Component<any,any> {
       try {
         this.setState({ user: user });
 
-        if (!user) return;
+        if (!user) {
+          localStorage.removeItem('userIsRegistered');
+          return;
+        }
 
         let userIsRegistered = localStorage.getItem('userIsRegistered');
 
@@ -36,7 +39,7 @@ class App extends React.Component<any,any> {
           return;
         }
 
-        await client.query({
+        const response: any = await client.query({
           query: gql(`
             {
               profile(uid: "${user.uid}") {
@@ -47,7 +50,9 @@ class App extends React.Component<any,any> {
           fetchPolicy: 'no-cache'
         });
 
-        localStorage.setItem('userIsRegistered', 'true');
+        if (response.data.profile) {
+          localStorage.setItem('userIsRegistered', 'true');
+        }
       } catch (error) {
         console.log(error);
       } finally {
