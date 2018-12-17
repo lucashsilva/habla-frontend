@@ -30,7 +30,7 @@ class PostCommentsComponent extends React.Component<PostCommentsComponentProps, 
         <Comment key={c.id}>
           <Comment.Avatar src={c.owner && c.owner.photoURL || 'https://semantic-ui.com/images/avatar2/large/matthew.png'} />
           <Comment.Content>
-            <Comment.Author as='a'>{ c.owner && c.owner.name || 'anonymous' }</Comment.Author>
+            <Comment.Author as='a'>{ c.owner && c.owner.username || 'anonymous' }</Comment.Author>
             <Comment.Metadata>
               { moment(c.createdAt).fromNow() } • <span className="distance">{ c.distance }</span>
             </Comment.Metadata>
