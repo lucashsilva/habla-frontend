@@ -63,9 +63,10 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
         });
     }
     
-
     render() {
         const post = this.state.post;
+
+        console.log(post);
 
         return (
             <div>
@@ -81,9 +82,9 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                             </NavLink>
                             
                             <div className="thumbs">
-                                <Icon link name="chevron up" size="big" onClick={() => this.vote("UP")}/>
+                                <Icon className={post.profilePostVote && post.profilePostVote.type == "UP"? 'disabled': null} link={!post.profilePostVote || post.profilePostVote.type != "UP"} name="chevron up" size="big" onClick={() => this.vote("UP")}/>
                                 { this.state.voting? <Loader inline active size="tiny"/>: post.rate || 0 }
-                                <Icon link name="chevron down" size="big" onClick={() => this.vote("DOWN")}/>
+                                <Icon className={post.profilePostVote && post.profilePostVote.type == "DOWN"? 'disabled': null} link={!post.profilePostVote || post.profilePostVote.type != "DOWN"} name="chevron down" size="big" onClick={() => this.vote("DOWN")}/>
                             </div>
                         </Card.Header>
                         <Card.Description className="post-body">
