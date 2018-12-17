@@ -67,7 +67,8 @@ class SidebarComponent extends React.Component<any, any> {
   public render() {
     return this.state.loading? <Loader active inline="centered"/> : (
       <div>
-        <Image rounded src={this.state.profile && this.state.profile.photoURL || 'https://react.semantic-ui.com/images/avatar/large/molly.png'}/>
+        <Image rounded 
+               src={this.state.profile && this.state.profile.photoURL || 'https://semantic-ui.com/images/avatar2/large/matthew.png'}/>
         <Menu vertical fluid>
           <Menu.Item as={NavLink} to="/timeline">
             <Icon name='home' />

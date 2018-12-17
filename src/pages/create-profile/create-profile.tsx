@@ -9,7 +9,7 @@ class CreateProfilePage extends React.Component<any, any> {
   constructor(props) {
     super(props);
 
-    this.state = { profile: { photoURL: firebase.auth().currentUser.photoURL || 'https://react.semantic-ui.com/images/avatar/large/molly.png' }, errorMessage: null };
+    this.state = { profile: { photoURL: firebase.auth().currentUser.photoURL }, errorMessage: null };
   }
 
   public render() {
@@ -45,7 +45,7 @@ class CreateProfilePage extends React.Component<any, any> {
             <Divider/>
             <Grid padded={false} columns={2}>
               <Grid.Column width={4} textAlign="center">
-                <Image src={this.state.profile.photoURL} rounded/>
+                <Image src={this.state.profile.photoURL || 'https://semantic-ui.com/images/avatar2/large/matthew.png'} rounded/>
               </Grid.Column>
               <Grid.Column width={12}>
                 <Form error={!!this.state.errorMessage}>

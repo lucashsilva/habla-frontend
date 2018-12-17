@@ -76,7 +76,7 @@ class PostComponent extends React.Component<PostComponentProps, PostComponentSta
                                 <Image floated='left' 
                                        size='mini' 
                                        className="avatar"
-                                       src={post.owner && post.owner.photoURL || 'https://react.semantic-ui.com/images/avatar/large/molly.png'}/>
+                                       src={post.owner && post.owner.photoURL || 'https://semantic-ui.com/images/avatar2/large/matthew.png'}/>
                                 {post.owner? post.owner.username: 'anonymous'}
                             </NavLink>
                             
